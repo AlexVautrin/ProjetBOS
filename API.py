@@ -3,6 +3,10 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/temperature")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Temperature value : 20"}
+
+@app.get("/occupancy")
+async def root():
+    return {"message": "Occupancy value : 1"}
