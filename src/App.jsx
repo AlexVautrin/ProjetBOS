@@ -5,6 +5,7 @@ import Chart from './components/Chart';
 import Calendar from 'react-calendar';
 import { RiUserLine, RiShoppingCartLine, RiBarChartLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
 import 'react-calendar/dist/Calendar.css';
+import './App.css'
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -42,7 +43,7 @@ function App() {
           <Chart />
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <div>
           <h2 className="text-xl font-bold mb-4">Calendrier</h2>
           <Calendar 
             onChange={setDate} 
