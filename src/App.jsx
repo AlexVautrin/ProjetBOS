@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import StatCard from './components/StatCard';
 import Chart from './components/Chart';
+import Calendar from 'react-calendar';
 import { RiUserLine, RiShoppingCartLine, RiBarChartLine, RiMoneyEuroCircleLine } from 'react-icons/ri';
+import 'react-calendar/dist/Calendar.css';
 
 function App() {
+  const [date, setDate] = useState(new Date());
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
@@ -34,8 +38,16 @@ function App() {
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-6 mb-8">
           <Chart />
+        </div>
+
+        <div className="grid grid-cols-1 gap-6">
+          <h2 className="text-xl font-bold mb-4">Calendrier</h2>
+          <Calendar 
+            onChange={setDate} 
+            value={date} 
+          />
         </div>
       </main>
     </div>
