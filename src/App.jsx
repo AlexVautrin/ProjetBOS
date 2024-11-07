@@ -13,23 +13,23 @@ function App() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard 
-            title="Utilisateurs"
-            value="1,234"
+            title="Salles"
+            value="234"
             icon={<RiUserLine />}
           />
           <StatCard 
-            title="Ventes"
-            value="€12,345"
+            title="test"
+            value="0"
             icon={<RiShoppingCartLine />}
           />
           <StatCard 
-            title="Taux de conversion"
-            value="2.4%"
+            title="test"
+            value="0"
             icon={<RiBarChartLine />}
           />
           <StatCard 
-            title="Revenu"
-            value="€34,567"
+            title="test"
+            value="0"
             icon={<RiMoneyEuroCircleLine />}
           />
         </div>
