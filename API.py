@@ -4,8 +4,22 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import pandas as pd
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5000",  # Remplace cela par l'URL de ton frontend 
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Liste des origines autorisées
+    allow_credentials=True,
+    allow_methods=["*"],  # Autorise toutes les méthodes (GET, POST, etc.)
+    allow_headers=["*"],  # Autorise tous les headers
+)
+
 
 # Configuration de la connexion MongoDB
 client = MongoClient('mongodb+srv://dijon_eseo_estp:TARCjcsFLhh60yRi@dijon.j7vi7.mongodb.net/')
