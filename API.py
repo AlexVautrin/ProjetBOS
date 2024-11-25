@@ -46,6 +46,16 @@ def get_name_by_alias(alias):
         return matching_row.iloc[0]['Name']
     else:
         return None
+    
+def get_aliases_by_etage(etage: int) -> List[str]:
+    df = pd.read_csv('Filtered_Rooming_With_Etage.csv', delimiter=';')
+    
+    matching_rows = df[df['etage'] == etage]
+    
+    aliases = matching_rows['alias'].tolist()
+    
+    return aliases
+
 
 # Fonction de récupération des données de température
 def fetch_temperature_data(space: str, start_date: datetime, end_date: datetime) -> List[TemperatureData]:
@@ -75,12 +85,22 @@ def fetch_temperature_data(space: str, start_date: datetime, end_date: datetime)
                 temperature_data[hour] = []
             temperature_data[hour].append(value)
 
-        processed_data = [
-            TemperatureData(timestamp=hour, AvgTemperature=round(sum(values) / len(values)))
-            for hour, values in temperature_data.items()
-        ]
+        processed_data = []
+        for hour, values in temperature_data.items():
+            # Filtrer les valeurs NaN
+            values = [v for v in values if v is not None and not pd.isna(v)]
+
+            # Si la liste de valeurs est vide, assignez une valeur par défaut
+            if values:
+                avg_temperature = round(sum(values) / len(values))
+            else:
+                avg_temperature = 0  # Ou une autre valeur par défaut que vous préférez
+
+            processed_data.append(TemperatureData(timestamp=hour, AvgTemperature=avg_temperature))
+
         return processed_data
     return []
+
 
 # Fonction de récupération des données d'occupation
 def fetch_occupancy_data(space: str, start_date: datetime, end_date: datetime) -> List[OccupancyData]:
@@ -136,3 +156,8 @@ async def get_temperature(space: int, start_date: datetime, end_date: datetime):
 @app.get("/occupancy", response_model=List[OccupancyData])
 async def get_occupancy(space: int, start_date: datetime, end_date: datetime):
     return fetch_occupancy_data(space, start_date, end_date)
+
+@app.get("/aliases_by_etage")
+async def get_aliases_by_etage_route(etage: int):
+    aliases = get_aliases_by_etage(etage)
+    return {"etage": etage, "aliases": aliases}
