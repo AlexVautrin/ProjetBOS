@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
-import StatCard from './components/StatCard';
+import SelectCard from './components/SelectCard';
 import Chart from './components/Chart';
 import OccupancyChart from './components/OccupancyChart';
 import Calendar from 'react-calendar';
@@ -274,7 +274,7 @@ function App() {
       <Sidebar />
       <main className="ml-64 flex-1 p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard 
+          <SelectCard 
             title="Étage"
             value={selectedEtage}
             icon={<RiHome4Fill />}
@@ -282,15 +282,15 @@ function App() {
             options={["0", "1", "2", "3", "4"]}
             onChange={handleEtageChange} // Mise à jour de l'étage
           />
-          <StatCard 
+          <SelectCard 
             title="Salle"
-            value={selectedRoom || "1"} // Afficher la première salle ou un message si aucune n'est disponible
+            value={selectedRoom || "Selectionné une salle"} // Afficher la première salle ou un message si aucune n'est disponible
             icon={<MdOutlineMeetingRoom />}
             isDropdown={true}
             options={availableRooms.length > 0 ? availableRooms : ["Aucune salle disponible"]} // Afficher les salles ou un message si aucune n'est disponible
             onChange={handleRoomChange} // Assurez-vous que cela met bien à jour selectedRoom
           />
-          <StatCard 
+          <SelectCard 
             title="Type"
             value={selectedType} // Afficher un texte si aucune salle n'est sélectionnée
             icon={selectedType === "Température" ? <FaTemperatureHigh /> : <FaHouseUser />} // Changer l'icône selon le type
@@ -298,7 +298,7 @@ function App() {
             options={["Température", "Occupation"]}
             onChange={handleTypeChange}
           />
-          <StatCard 
+          <SelectCard 
             title="Période"
             value={selectedPeriod}
             icon={<FaCalendarDays />}
@@ -345,14 +345,15 @@ function App() {
           )}
         </div>
         
-        <h2>Occupation</h2>
+        {/* <h2>Occupation</h2>
         <ul>
           {occupancyData.map((occ) => (
             <li key={occ.timestamp}>
               {new Date(occ.timestamp).toLocaleString()} : {occ.occupancy ? "Occupé" : "Non occupé"}
             </li>
           ))}
-        </ul>
+        </ul> */}
+
       </main>
     </div>
   );

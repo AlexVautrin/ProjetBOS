@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Card, Text, Metric } from "@tremor/react";
 
-function StatCard({ title, value, icon, options = [], isDropdown = false, onChange }) {
+function SelectCard({ title, value, icon, options = [], isDropdown = false, onChange }) {
   const [selectedValue, setSelectedValue] = useState(value);
   const [isEditing, setIsEditing] = useState(false);
   const selectRef = useRef(null);
@@ -9,12 +9,11 @@ function StatCard({ title, value, icon, options = [], isDropdown = false, onChan
   const handleSelectChange = (event) => {
     const newValue = event.target.value;
     setSelectedValue(newValue);
-    onChange(newValue); // Appeler la fonction onChange pour mettre à jour la salle dans le parent
-    setIsEditing(false);  // Ferme le select après avoir sélectionné une option
+    onChange(newValue);
+    setIsEditing(false);
   };
 
   const handleBlur = (event) => {
-    // Vérifie si le clic est en dehors du menu déroulant et ferme le select
     if (selectRef.current && !selectRef.current.contains(event.relatedTarget)) {
       setIsEditing(false);
     }
@@ -22,14 +21,14 @@ function StatCard({ title, value, icon, options = [], isDropdown = false, onChan
 
   return (
     <Card 
-      className="max-w-xs mx-auto" 
+      className="max-w-xs mx-auto bg-white"
       decoration="top" 
       decorationColor="indigo"
       onBlur={handleBlur}
       tabIndex={-1}
     >
       <div 
-        className={`flex items-center justify-between ${isDropdown ? 'cursor-pointer' : ''}`}  // Ajouter `cursor-pointer` uniquement si isDropdown est true
+        className={`flex items-center justify-between ${isDropdown ? 'cursor-pointer' : ''}`}
         onClick={() => isDropdown && setIsEditing(true)}
       >
         <div>
@@ -61,4 +60,4 @@ function StatCard({ title, value, icon, options = [], isDropdown = false, onChan
   );
 }
 
-export default StatCard;
+export default SelectCard;
