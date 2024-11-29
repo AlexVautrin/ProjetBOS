@@ -29,7 +29,7 @@ function OccupancyChart({ data, room, startDate, endDate }) {
   // Transformation des données pour recharts
   const transformedData = data.map((item) => ({
     ...item,
-    occupancy: item.occupancy ? 20 : 0, // Valeurs numériques pour le graphique
+    occupancy: item.occupancy ? 20 : 0,
   }));
 
   return (
@@ -45,8 +45,8 @@ function OccupancyChart({ data, room, startDate, endDate }) {
           {/* Axe des ordonnées avec étiquettes personnalisées */}
           <YAxis
             tickFormatter={(value) => (value === 20 ? "Occupé" : value === 0 ? "Non occupé" : "")}
-            domain={[0, 20]} // Limite les valeurs entre 0 et 20
-            ticks={[0, 20]} // Affiche uniquement les valeurs 0 et 20
+            domain={[0, 20]}
+            ticks={[0, 20]}
           />
           <Tooltip
             formatter={(value) => (value === 20 ? "Occupé" : "Non occupé")}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import SelectCard from './components/SelectCard';
-import CombinedChart from './components/CombinedChart';
 import OccupancyChart from './components/OccupancyChart';
 import TemperatureChart from './components/TemperatureChart';
 import Calendar from 'react-calendar';
@@ -295,7 +294,7 @@ function App() {
             value={selectedType}
             icon={selectedType === "Température" ? <FaTemperatureHigh /> : <FaHouseUser />}
             isDropdown={true}
-            options={["Température", "Occupation", "Combiné"]}
+            options={["Température", "Occupation"]}
             onChange={handleTypeChange}
           />
           <SelectCard 
@@ -333,14 +332,6 @@ function App() {
             ) : selectedType === "Occupation" ? (
               <OccupancyChart
                 data={getOccupancyChartData()}
-                room={selectedRoom}
-                startDate={startDate}
-                endDate={endDate}
-              />
-            ) : selectedType === "Combiné" ? (
-              <CombinedChart
-                temperatureData={temperatureData}
-                occupancyData={occupancyData}
                 room={selectedRoom}
                 startDate={startDate}
                 endDate={endDate}
