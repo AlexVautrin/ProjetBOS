@@ -39,7 +39,7 @@ class TemperatureData(BaseModel):
 
 # Fonction pour obtenir le nom d'espace par alias
 def get_name_by_alias(alias):
-    df = pd.read_csv('Filtered_Rooming.csv', delimiter=';')
+    df = pd.read_csv('Filtered_Rooming_With_Etage.csv', delimiter=';')
     matching_row = df[df['alias'] == alias]
     if not matching_row.empty:
         print (matching_row.iloc[0]['Name'])
