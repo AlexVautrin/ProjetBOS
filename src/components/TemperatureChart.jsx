@@ -3,7 +3,7 @@ import { Card, Title, AreaChart } from "@tremor/react";
 
 function Chart({ data, room, startDate, endDate }) {
   // Format de la date pour l'affichage
-  const formatDate = (date) => date.toLocaleDateString('fr-FR'); // Format français : JJ/MM/AAAA
+  const formatDate = (date) => date.toLocaleDateString('fr-FR');
 
   // Calcul de la date de fin moins un jour
   const adjustedEndDate = new Date(endDate);
@@ -34,10 +34,10 @@ function Chart({ data, room, startDate, endDate }) {
       <AreaChart
         className="h-72 mt-4"
         data={data}
-        index="date" // Utiliser 'date' (ou 'heure' selon votre formatage) comme index
-        categories={["temperature"]} // Afficher la température dans les catégories
-        colors={["indigo"]} // Couleur de la courbe
-        valueFormatter={(value) => `${value} °C`} // Format pour afficher la température avec un symbole '°C'
+        index="date"
+        categories={["temperature"]}
+        colors={["indigo"]}
+        valueFormatter={(value) => `${value} °C`} 
       />
     </Card>
   );

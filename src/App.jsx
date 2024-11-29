@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import SelectCard from './components/SelectCard';
-import Chart from './components/Chart';
+import CombinedChart from './components/CombinedChart';
 import OccupancyChart from './components/OccupancyChart';
+import TemperatureChart from './components/TemperatureChart';
 import Calendar from 'react-calendar';
 import { RiHome4Fill } from 'react-icons/ri';
 import { MdOutlineMeetingRoom } from "react-icons/md";
@@ -81,6 +82,10 @@ function App() {
 
   const handleEtageChange = (newEtage) => {
     setSelectedEtage(newEtage);
+    if (newEtage === "Selectionné un étage") {
+      setAvailableRooms(["Aucune salle disponible"]);
+      setSelectedRoom(null);
+    }
   };
 
   const handleTypeChange = (newType) => {
@@ -244,9 +249,6 @@ function App() {
         const data = await response.json();
         setAvailableRooms(data.aliases);
 
-        if (data.aliases.length > 0 && !selectedRoom) {
-          setSelectedRoom(data.aliases[0]);
-        }
       } else {
         console.error("Erreur lors de la récupération des salles");
       }
@@ -277,7 +279,7 @@ function App() {
             value={selectedEtage || "Selectionné un étage"}
             icon={<RiHome4Fill />}
             isDropdown={true}
-            options={["0", "1", "2", "3", "4"]}
+            options={["Selectionné un étage","0", "1", "2", "3", "4"]}
             onChange={handleEtageChange}
           />
           <SelectCard 
@@ -293,7 +295,7 @@ function App() {
             value={selectedType}
             icon={selectedType === "Température" ? <FaTemperatureHigh /> : <FaHouseUser />}
             isDropdown={true}
-            options={["Température", "Occupation"]}
+            options={["Température", "Occupation", "Combiné"]}
             onChange={handleTypeChange}
           />
           <SelectCard 
@@ -322,19 +324,31 @@ function App() {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
               </div>
             ) : selectedType === "Température" ? (
-              <Chart
+              <TemperatureChart
                 data={getChartData()}
                 room={selectedRoom}
                 startDate={startDate}
                 endDate={endDate}
               />
-            ) : (
+            ) : selectedType === "Occupation" ? (
               <OccupancyChart
                 data={getOccupancyChartData()}
                 room={selectedRoom}
                 startDate={startDate}
                 endDate={endDate}
               />
+            ) : selectedType === "Combiné" ? (
+              <CombinedChart
+                temperatureData={temperatureData}
+                occupancyData={occupancyData}
+                room={selectedRoom}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            ) : (
+              <p className="text-center text-gray-500">
+                Veuillez sélectionner un type de graphique.
+              </p>
             )
           ) : (
             <p className="text-center text-gray-500">
