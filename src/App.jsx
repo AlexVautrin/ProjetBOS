@@ -12,21 +12,21 @@ import 'react-calendar/dist/Calendar.css';
 import './App.css';
 
 function App() {
-  const [date, setDate] = useState(new Date());  // Date sélectionnée dans le calendrier
-  const [isLoading, setIsLoading] = useState(false); // Ajoutez cet état
-  const [selectedRoom, setSelectedRoom] = useState(null); // Salle sélectionnée
-  const [selectedEtage, setSelectedEtage] = useState("0");
+  const [date, setDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [selectedEtage, setSelectedEtage] = useState(null);
   const [selectedType, setSelectedType] = useState("Température");
   const [selectedPeriod, setSelectedPeriod] = useState("Journalier");
   const [temperatureData, setTemperatureData] = useState([]);
   const [occupancyData, setOccupancyData] = useState([]);
-  const [availableRooms, setAvailableRooms] = useState([]); // Liste des salles disponibles
+  const [availableRooms, setAvailableRooms] = useState([]);
 
   // Fonction pour obtenir le premier jour de la semaine (lundi)
   const getStartOfWeek = (date) => {
     const start = new Date(date);
     const day = start.getDay();
-    const diff = start.getDate() - day + (day === 0 ? -6 : 1); // Si dimanche (0), aller au lundi précédent
+    const diff = start.getDate() - day + (day === 0 ? -6 : 1);
     start.setDate(diff);
     start.setHours(0, 0, 0, 0);
     return start;
@@ -36,7 +36,7 @@ function App() {
   const getEndOfWeek = (date) => {
     const end = new Date(date);
     const day = end.getDay();
-    const diff = end.getDate() + (day === 0 ? 0 : 7 - day); // Le dimanche (0) est déjà la fin, donc on n'ajoute rien
+    const diff = end.getDate() + (day === 0 ? 0 : 7 - day);
     end.setDate(diff);
     end.setHours(23, 59, 59, 999);
     return end;
@@ -45,7 +45,7 @@ function App() {
   // Fonction pour obtenir le premier jour du mois
   const getStartOfMonth = (date) => {
     const start = new Date(date);
-    start.setDate(1); // Aller au premier jour du mois
+    start.setDate(1);
     start.setHours(0, 0, 0, 0);
     return start;
   };
@@ -53,8 +53,8 @@ function App() {
   // Fonction pour obtenir le dernier jour du mois
   const getEndOfMonth = (date) => {
     const end = new Date(date);
-    end.setMonth(end.getMonth() + 1); // Aller au mois suivant
-    end.setDate(0); // Le dernier jour du mois courant
+    end.setMonth(end.getMonth() + 1);
+    end.setDate(0);
     end.setHours(23, 59, 59, 999);
     return end;
   };
@@ -99,7 +99,7 @@ function App() {
   };
 
   const fetchData = async (room, startDate, endDate) => {
-    if (!room) return; // Si aucune salle n'est sélectionnée, ne pas effectuer la requête
+    if (!room) return;
     setIsLoading(true);
     try {
       const formattedStartDate = formatDateForAPI(startDate);
@@ -130,20 +130,20 @@ function App() {
       const chartData = hours.map((hour) => {
         const tempData = temperatureData.find(d => new Date(d.timestamp).getHours() === hour);
         return {
-          date: `${hour}:00`, // Heure au format "HH:00"
-          temperature: tempData ? tempData.AvgTemperature : 0, // Température (en °C)
+          date: `${hour}:00`,
+          temperature: tempData ? tempData.AvgTemperature : 0, 
         };
       });
       return chartData;
     } else if (selectedPeriod === "Hebdomadaire") {
       const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
       const chartData = [];
-      const startOfWeek = getStartOfWeek(date); // Calculer le lundi de la semaine
+      const startOfWeek = getStartOfWeek(date); 
 
       // Boucle sur les jours de la semaine, mais en ajustant l'indice du jour
       for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
         const currentDay = new Date(startOfWeek);
-        currentDay.setDate(currentDay.getDate() + dayIndex); // Déplacer le jour en fonction de l'index
+        currentDay.setDate(currentDay.getDate() + dayIndex);
 
         const dayName = daysOfWeek[dayIndex];
         
@@ -153,27 +153,27 @@ function App() {
             return tempDate.getDate() === currentDay.getDate() && tempDate.getHours() === hourIndex;
           });
           return {
-            date: `${dayName} ${hourIndex}h`, // Afficher "Lundi 00h", "Mardi 01h", etc.
-            temperature: tempData ? tempData.AvgTemperature : 0, // Température (en °C)
+            date: `${dayName} ${hourIndex}h`,
+            temperature: tempData ? tempData.AvgTemperature : 0,
           };
         });
-        chartData.push(...dayData); // Ajouter les données de chaque jour
+        chartData.push(...dayData);
       }
 
       return chartData;
     } else if (selectedPeriod === "Mensuel") {
-      const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(); // Nombre de jours dans le mois
+      const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
       const chartData = [];
 
       for (let day = 1; day <= daysInMonth; day++) {
         const dayData = Array.from({ length: 24 }, (_, hourIndex) => {
           const tempData = temperatureData.find(d => new Date(d.timestamp).getDate() === day && new Date(d.timestamp).getHours() === hourIndex);
           return {
-            date: `${day}/${date.getMonth() + 1} ${hourIndex}:00`, // Ex: "1/11 00:00"
-            temperature: tempData ? tempData.AvgTemperature : 0, // Température (en °C)
+            date: `${day}/${date.getMonth() + 1} ${hourIndex}:00`,
+            temperature: tempData ? tempData.AvgTemperature : 0,
           };
         });
-        chartData.push(...dayData); // Ajouter les données de chaque jour
+        chartData.push(...dayData);
       }
 
       return chartData;
@@ -186,7 +186,7 @@ function App() {
       const chartData = hours.map((hour) => {
         const occData = occupancyData.find(d => new Date(d.timestamp).getHours() === hour);
         return {
-          date: `${hour}:00`, // Heure au format "HH:00"
+          date: `${hour}:00`,
           occupancy: occData ? occData.occupancy : 0,
         };
       });
@@ -194,11 +194,11 @@ function App() {
     } else if (selectedPeriod === "Hebdomadaire") {
       const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
       const chartData = [];
-      const startOfWeek = getStartOfWeek(date); // Calculer le lundi de la semaine
+      const startOfWeek = getStartOfWeek(date);
   
       for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
         const currentDay = new Date(startOfWeek);
-        currentDay.setDate(currentDay.getDate() + dayIndex); // Déplacer le jour en fonction de l'index
+        currentDay.setDate(currentDay.getDate() + dayIndex);
   
         const dayName = daysOfWeek[dayIndex];
           
@@ -208,8 +208,8 @@ function App() {
             return occDate.getDate() === currentDay.getDate() && occDate.getHours() === hourIndex;
           });
           return {
-            date: `${dayName} ${hourIndex}h`, // Afficher "Lundi 00h", "Mardi 01h", etc.
-            occupancy: occData ? occData.occupancy : 0, // Occupation (1 pour occupé, 0 pour non occupé)
+            date: `${dayName} ${hourIndex}h`,
+            occupancy: occData ? occData.occupancy : 0,
           };
         });
         chartData.push(...dayData);
@@ -217,15 +217,15 @@ function App() {
   
       return chartData;
     } else if (selectedPeriod === "Mensuel") {
-      const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(); // Nombre de jours dans le mois
+      const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
       const chartData = [];
   
       for (let day = 1; day <= daysInMonth; day++) {
         const dayData = Array.from({ length: 24 }, (_, hourIndex) => {
           const occData = occupancyData.find(d => new Date(d.timestamp).getDate() === day && new Date(d.timestamp).getHours() === hourIndex);
           return {
-            date: `${day}/${date.getMonth() + 1} ${hourIndex}:00`, // Ex: "1/11 00:00"
-            occupancy: occData ? occData.occupancy : 0, // Occupation (1 pour occupé, 0 pour non occupé)
+            date: `${day}/${date.getMonth() + 1} ${hourIndex}:00`,
+            occupancy: occData ? occData.occupancy : 0,
           };
         });
         chartData.push(...dayData);
@@ -242,11 +242,10 @@ function App() {
       const response = await fetch(`http://localhost:8000/aliases_by_etage?etage=${etage}`);
       if (response.ok) {
         const data = await response.json();
-        setAvailableRooms(data.aliases); // Mettre à jour la liste des salles
+        setAvailableRooms(data.aliases);
 
-        // Si aucune salle n'est sélectionnée, la première salle est sélectionnée automatiquement
         if (data.aliases.length > 0 && !selectedRoom) {
-          setSelectedRoom(data.aliases[0]); // Sélectionner la première salle
+          setSelectedRoom(data.aliases[0]);
         }
       } else {
         console.error("Erreur lors de la récupération des salles");
@@ -257,12 +256,11 @@ function App() {
   };
 
   useEffect(() => {
-    fetchRoomsForEtage(selectedEtage); // Récupérer les salles liées à l'étage
-  }, [selectedEtage]); // S'exécute lorsque l'étage change
+    fetchRoomsForEtage(selectedEtage);
+  }, [selectedEtage]);
 
-  // useEffect pour vérifier si selectedRoom change
   useEffect(() => {
-    console.log("Salle sélectionnée :", selectedRoom); // Cela devrait afficher la salle sélectionnée dans la console
+    console.log("Salle sélectionnée :", selectedRoom);
   }, [selectedRoom]);
 
   useEffect(() => {
@@ -276,24 +274,24 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <SelectCard 
             title="Étage"
-            value={selectedEtage}
+            value={selectedEtage || "Selectionné un étage"}
             icon={<RiHome4Fill />}
             isDropdown={true}
             options={["0", "1", "2", "3", "4"]}
-            onChange={handleEtageChange} // Mise à jour de l'étage
+            onChange={handleEtageChange}
           />
           <SelectCard 
             title="Salle"
-            value={selectedRoom || "Selectionné une salle"} // Afficher la première salle ou un message si aucune n'est disponible
+            value={selectedRoom || "Selectionné une salle"}
             icon={<MdOutlineMeetingRoom />}
             isDropdown={true}
-            options={availableRooms.length > 0 ? availableRooms : ["Aucune salle disponible"]} // Afficher les salles ou un message si aucune n'est disponible
-            onChange={handleRoomChange} // Assurez-vous que cela met bien à jour selectedRoom
+            options={availableRooms.length > 0 ? availableRooms : ["Aucune salle disponible"]}
+            onChange={handleRoomChange}
           />
           <SelectCard 
             title="Type"
-            value={selectedType} // Afficher un texte si aucune salle n'est sélectionnée
-            icon={selectedType === "Température" ? <FaTemperatureHigh /> : <FaHouseUser />} // Changer l'icône selon le type
+            value={selectedType}
+            icon={selectedType === "Température" ? <FaTemperatureHigh /> : <FaHouseUser />}
             isDropdown={true}
             options={["Température", "Occupation"]}
             onChange={handleTypeChange}
@@ -318,7 +316,7 @@ function App() {
         <div className="mt-5 border-t-2 border-indigo-500 mb-4"></div>
 
         <div className="grid grid-cols-1 gap-6 mb-8">
-          {selectedRoom ? (
+          {selectedRoom && selectedEtage ? (
             isLoading ? (
               <div className="flex justify-center items-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
@@ -332,7 +330,7 @@ function App() {
               />
             ) : (
               <OccupancyChart
-                data={getOccupancyChartData()} // Remplacez ici pour utiliser la fonction getOccupancyChartData
+                data={getOccupancyChartData()}
                 room={selectedRoom}
                 startDate={startDate}
                 endDate={endDate}
