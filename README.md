@@ -1,8 +1,33 @@
-# React + Vite
+Avant utilisation : 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Installer Node.js 
 
-Currently, two official plugins are available:
+(Il y a le fichier installer qu'il faut renommer avec un .bat pour éviter les installations à la main)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Installer FastAPI : 
+pip install "fastapi[standard]"
+
+- Installer Pydantic : 
+pip install pydantic
+
+- Installer Pymongo :
+pip install pymongo
+
+- Installer Pandas : 
+pip install pandas
+
+- Installer eslint : 
+npm install eslint --save-dev
+
+- Installer CalendarReact : 
+npm install react-calendar
+
+Pour utiliser : 
+
+Lancer FastAPI depuis la racine du projet :
+    - fastapi dev main.py 
+    - L'ouvrir sur le navigateur avec l'url "http://127.0.0.1:8000/docs#/"
+
+- Lancer l'application depuis le dossier src/ :
+    - npm start
+    - Il s'ouvre sous l'url "http://localhost:5000"
